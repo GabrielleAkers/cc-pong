@@ -406,6 +406,7 @@ local host_game = function()
                         state[notyou].id = evt[2]
                         send_msg(accept_evt)
                         game_state = "countdown"
+                        rednet.unhost(protocol)
                         return
                     else
                         send_msg(reject_evt, evt[2])
@@ -492,6 +493,7 @@ local join_game = function()
                 and evt[4] >= btn[2] - 1 and evt[4] <= btn[4] then
                         if i == 1 then
                             game_list = fetch_games()
+                            render_game_list()
                         elseif i == choice then
                             print(choice)
                             term.clear()
@@ -976,7 +978,7 @@ local end_game = function()
     write(winner_name .. " wins!")
     term.setCursorPos(tw / 2 - 5, th / 2 + 2)
     local parsed_record = parse_record(winner_record)
-    if parsed_record.wins ~= -1 and parse_record.losses ~= -1 then
+    if parsed_record.wins ~= -1 and parsed_record.losses ~= -1 then
         write(string.format("They've won %d games", parsed_record.wins))
         term.setCursorPos(tw / 2 - 3, th / 2 + 3)
         write(string.format("and lost %d", parsed_record.losses))
